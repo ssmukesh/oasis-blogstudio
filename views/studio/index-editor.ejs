@@ -12,6 +12,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+    <!-- Include Editor style. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css"
+    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_style.min.css" rel="stylesheet" type="text/css"
+    />
+
+    <script src="/scripts/studioEditor.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -20,35 +27,100 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
 
-    <!-- Include Editor style. -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css"
-    />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_style.min.css" rel="stylesheet" type="text/css"
-    />
-
 </head>
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="#">Blog Studio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button id="btnImport" class="btn btn-outline-info my-2 mr-sm-2">Import</button>
+                <button id="btnPreview" class="btn btn-outline-warning my-2 mr-sm-2">Preview</button>
+                <!-- <button id="btnPublish" class="btn btn-outline-success my-2 my-sm-0">Publish...</button> -->
+            </form>
+        </div>
     </nav>
 
 
     <main role="main" class="container">
         <!-- Create a tag that we will use as the editable area. -->
         <!-- You can use a div tag as well. -->
-        <textarea></textarea>
+        <div id="editor"></div>
     </main>
-
+    <!-- modal -->
+    <div class="modal fade" id="ModalEditorWindow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Import</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="ModalEditor"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnModalImport">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Include external JS libs. -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
 
     <!-- Include Editor JS files. -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.pkgd.min.js"></script>
-    <!-- Initialize the editor. -->
-    <script> $(function () { $('textarea').froalaEditor() }); </script>
+
+    <script>
+
+        function Import(e) {
+            e.preventDefault();
+            $('#ModalEditorWindow').modal('show');
+        }
+
+        function ModalImport(e) {
+            e.preventDefault();
+            $('#ModalEditorWindow').modal('hide');
+            var importedContent = $("#ModalEditor").froalaEditor('html.get');
+            $('div#editor').froalaEditor('html.set', importedContent);
+        }
+
+        function Preview(e) {
+            e.preventDefault();
+            console.log("Preview");
+            window.GL_editorContent = $('div#editor').froalaEditor('html.get');
+            window.open("/preview");
+        };
+
+        function Publish(e) {
+            e.preventDefault();
+            console.log("Publish");
+
+            GL_editorContent = $('div#editor').froalaEditor('html.get');
+        };
+
+        $(document).ready(function () {
+
+            $('div#editor').froalaEditor();
+            $("#ModalEditor").froalaEditor();
+
+            $("#btnImport").unbind("click").bind("click", function (e) { Import(e); });
+            $("#btnPreview").unbind("click").bind("click", function (e) { Preview(e); });
+            // $("#btnPublish").unbind("click").bind("click", function (e) { Publish(e); });
+            $("#btnModalImport").unbind("click").bind("click", function (e) { ModalImport(e); });
+
+        });
+
+    </script>
 </body>
 
 </html>
