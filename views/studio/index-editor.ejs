@@ -84,7 +84,14 @@
 
         function Import(e) {
             e.preventDefault();
-            $('#ModalEditorWindow').modal('show');
+
+            $.get("/api_call/blogHTMLWithImageVideo", function (data) {
+                if (data.bloghtml) {
+                    $('#ModalEditor').froalaEditor('html.set', data.bloghtml);
+                }
+                $('#ModalEditorWindow').modal('show');
+            });
+
         }
 
         function ModalImport(e) {
