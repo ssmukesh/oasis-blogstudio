@@ -1,0 +1,6 @@
+{
+    "databaseConfig": {
+        "host": "testadmin:mukesh1303@ds157097.mlab.com:57097",
+        "database": "ys_customermanager"
+    }
+}

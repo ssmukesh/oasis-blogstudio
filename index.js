@@ -5,6 +5,8 @@ var http = require('http');
 
 var request = require('request');
 var app = express();
+const database = require('./lib/database');
+const seeder = require('./lib/dbSeeder');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
@@ -14,3 +16,31 @@ app.get('/preview', (req, res) => res.render('studio/preview'));
 app.get('/studio/editor', (req, res) => res.render('studio/index-editor'));
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 app.use('/api_call', require('./routes/api_call.js'));
+
+initCustomMiddleware();
+initDbSeeder();
+
+function initCustomMiddleware() {
+    if (process.platform === "win32") {
+        require("readline").createInterface({
+            input: process.stdin,
+            output: process.stdout
+        }).on("SIGINT", () => {
+            console.log('SIGINT: Closing MongoDB connection');
+            database.close();
+        });
+    }
+
+    process.on('SIGINT', () => {
+        console.log('SIGINT: Closing MongoDB connection');
+        database.close();
+    });
+}
+
+
+function initDbSeeder() {
+    database.open(() => {
+        seeder.init();
+    });
+}
+
