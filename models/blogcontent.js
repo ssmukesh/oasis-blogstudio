@@ -3,8 +3,9 @@ const mongoose = require('mongoose'),
     ObjectId = Schema.ObjectId;
 
 const BlogContentSchema = new Schema({
-    id: { type: Number, required: true },    
-    name: { type: String, required: true, trim: true }
+    userid: { type: String, required: true, trim: true },
+    bloghtml: { type: String, required: false, trim: false },
+    createdAt: { type: Date, required: true, trim: true }
 });
 
 module.exports = mongoose.model('BlogContent', BlogContentSchema);

@@ -18,8 +18,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/css/froala_style.min.css" rel="stylesheet" type="text/css"
     />
 
-    <script src="/scripts/studioEditor.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
@@ -42,7 +40,7 @@
             <form class="form-inline my-2 my-lg-0">
                 <button id="btnImport" class="btn btn-outline-info my-2 mr-sm-2">Import</button>
                 <button id="btnPreview" class="btn btn-outline-warning my-2 mr-sm-2">Preview</button>
-                <!-- <button id="btnPublish" class="btn btn-outline-success my-2 my-sm-0">Publish...</button> -->
+                <button id="btnPublish" class="btn btn-outline-success my-2 my-sm-0">Publish...</button>
             </form>
         </div>
     </nav>
@@ -80,54 +78,8 @@
     <!-- Include Editor JS files. -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.pkgd.min.js"></script>
 
-    <script>
+    <script src="/scripts/studioEditor.js"></script>
 
-        function Import(e) {
-            e.preventDefault();
-
-            $.get("/api_call/blogHTMLWithImageVideo", function (data) {
-                if (data.bloghtml) {
-                    $('#ModalEditor').froalaEditor('html.set', data.bloghtml);
-                }
-                $('#ModalEditorWindow').modal('show');
-            });
-
-        }
-
-        function ModalImport(e) {
-            e.preventDefault();
-            $('#ModalEditorWindow').modal('hide');
-            var importedContent = $("#ModalEditor").froalaEditor('html.get');
-            $('div#editor').froalaEditor('html.set', importedContent);
-        }
-
-        function Preview(e) {
-            e.preventDefault();
-            console.log("Preview");
-            window.GL_editorContent = $('div#editor').froalaEditor('html.get');
-            window.open("/preview");
-        };
-
-        function Publish(e) {
-            e.preventDefault();
-            console.log("Publish");
-
-            GL_editorContent = $('div#editor').froalaEditor('html.get');
-        };
-
-        $(document).ready(function () {
-
-            $('div#editor').froalaEditor();
-            $("#ModalEditor").froalaEditor();
-
-            $("#btnImport").unbind("click").bind("click", function (e) { Import(e); });
-            $("#btnPreview").unbind("click").bind("click", function (e) { Preview(e); });
-            // $("#btnPublish").unbind("click").bind("click", function (e) { Publish(e); });
-            $("#btnModalImport").unbind("click").bind("click", function (e) { ModalImport(e); });
-
-        });
-
-    </script>
 </body>
 
 </html>

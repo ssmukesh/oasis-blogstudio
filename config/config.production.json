@@ -1,6 +1,6 @@
 {
     "databaseConfig": {
-        "host": "testadmin:mukesh1303@ds157097.mlab.com:57097",
-        "database": "ys_customermanager"
+        "host": "oasis_dbadmin:oasis1303@ds257077.mlab.com:57077",
+        "database": "oasis_blogstudio"
     }
 }
