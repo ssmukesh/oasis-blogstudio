@@ -31,7 +31,7 @@ router.get('/blogHTMLWithImageVideo', function (req, res) {
 
 router.post('/publishBlog', function (req, res) {
 
-    console.log("API: publishBlog");    
+    console.log("API: publishBlog");
 
     let blogContent = new BlogContent();
     blogContent.bloghtml = req.body.bloghtml;
@@ -48,5 +48,32 @@ router.post('/publishBlog', function (req, res) {
     });
 
 });
+
+router.get('/getAllBlogs', function (req, res) {
+
+    console.log("API: getAllBlogs");
+
+    blogcontentRepo.getAllPublishedBlog((err, data) => {
+        if (err) {
+            console.log('*** getAllPublishedBlog error: ' + util.inspect(err));
+            return res.json({ status: { type: "error", msg: util.inspect(err) }, statusCode: 200 });
+        } else {
+            console.log('*** getAllPublishedBlog ok');
+            return res.json(
+                {
+                    status:
+                        {
+                            type: "success",
+                            msg: "",
+                            blogData: data
+                        },
+                    statusCode: 200
+                }
+            );
+        }
+    });
+
+});
+
 
 module.exports = router;

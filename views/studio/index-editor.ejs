@@ -38,9 +38,9 @@
             <ul class="navbar-nav mr-auto">
             </ul>
             <form class="form-inline my-2 my-lg-0">
+                <button id="btnPublish" class="btn btn-outline-success my-2 mr-sm-2">Publish...</button>
                 <button id="btnImport" class="btn btn-outline-info my-2 mr-sm-2">Import</button>
                 <button id="btnPreview" class="btn btn-outline-warning my-2 mr-sm-2">Preview</button>
-                <button id="btnPublish" class="btn btn-outline-success my-2 my-sm-0">Publish...</button>
             </form>
         </div>
     </nav>
@@ -62,15 +62,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="ModalEditor"></div>
+                    <!-- <div id="ModalEditor"></div> -->
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Created At</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblTbImport" style="height: 50px;">
+
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnModalImport">Import</button>
+                    <!-- <button type="button" class="btn btn-primary" id="btnModalImport">Import</button> -->
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal js-loading-bar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="progress progress-popup">
+                        <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Include external JS libs. -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
@@ -78,6 +102,8 @@
     <!-- Include Editor JS files. -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.7.3/js/froala_editor.pkgd.min.js"></script>
 
+    <script src="/scripts/notify.js"></script>
+    <script src="/scripts/jquery-dateFormat.js"></script>
     <script src="/scripts/studioEditor.js"></script>
 
 </body>
