@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="CPanel - Restaurants UAE">
+    <meta name="author" content="Mukesh Selvaraj">
+    <title>Yellow Pages - Blog Studio</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/signin.css" />
+    <link href="/stylesheets/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/stylesheets/material/ej.web.all.min.css" />
+</head>
+
+<body id="homeContainer">
+    <div id="dvLogin">
+        <form class="form-signin" id="loginForm">
+            <i class="fas fa-sign-in-alt fa-5x" aria-hidden="true"></i>
+            <br/>
+            <br/>
+            <h1 class="h3 mb-3 font-weight-normal">Yellow Pages - Blog Studio</h1>
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <button id="btnsubmit" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/globalize/1.3.0/globalize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>    
+    <script src="/scripts/ej.widget.all.min.js"></script>
+    <script type="text/javascript" src="/scripts/app.config.json"></script>
+    <script type="text/javascript" src="/scripts/pnotify.custom.min.js"></script>
+    <script type="text/javascript" src="/scripts/jquery.formatDateTime.min.js"></script>
+    <script type="text/javascript" src="/scripts/Plugin.Helper.js"></script>
+    <script type="text/javascript" src="/scripts/Plugin.PNotify.js"></script>
+    <script type="text/javascript" src="/scripts/signin.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var container = $("#dvLogin");
+            container.HelperPlugin({});
+            container.PNotifyPlugin({});
+            container.UserPlugin({});
+        });
+
+    </script>
+    <footer class="mastfoot">
+        <div class="inner">
+            <p>
+                <a href="https://www.yellowpages-uae.com/" target="_blank">Yellow Pages</a>
+            </p>
+            <p>
+                © 2018 Lunad Media & Communication LLC. All rights reserved. Terms and conditions, features, support, and service options
+                subject to change without notice.
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

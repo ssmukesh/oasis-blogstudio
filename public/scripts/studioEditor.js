@@ -1,5 +1,5 @@
 function Import(e) {
-    e.preventDefault();   
+    e.preventDefault();
 
     $.get("/api_call/getAllBlogs", function (data) {
         console.log(data);
@@ -70,6 +70,52 @@ function progressbar(isOpen) {
 function Publish(e) {
     e.preventDefault();
     console.log("Publish");
+    var user_profile = $container.HelperPlugin().GetUserProfile();
+    //$container.HelperPlugin().ShowHideEjWaitingPopup(true);
+    GL_editorContent = $('div#editor').froalaEditor('html.get');
+
+    var blog =
+        {
+            MetaTitle: "",
+            MetaKeywords: "",
+            MetaDescription: "",
+            BlogContent: GL_editorContent,
+            BlogUrl: "",
+            BlogTitle: "",
+            BlogKeyword: "",
+            BlogThumnailUrl: "",
+            FkUserId: user_profile.PKGuid
+        };
+
+    $.ajax({
+        url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.UpsertBlog,
+        type: 'POST',
+        cache: false,
+        data: blog,
+        contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + user_profile.grant_access_token);
+        },
+        success: function (data) {
+            //$container.HelperPlugin().ShowHideEjWaitingPopup(false);
+            $container.HelperPlugin().showPNotifyAlert(null, {
+                title: "Information",
+                text: 'Blog contents are published.', type: "info"
+            });
+        },
+        error: function (error) {
+            //$container.HelperPlugin().ShowHideEjWaitingPopup(false);
+            $container.HelperPlugin().showPNotifyAlert(null, {
+                title: "Alert",
+                text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
+            });
+        }
+    });
+}
+
+function Publish_Mongo(e) {
+    e.preventDefault();
+    console.log("Publish");
 
 
     progressbar(true);
@@ -103,7 +149,10 @@ function Publish(e) {
 $(document).ready(function () {
 
     $('div#editor').froalaEditor();
-    // $("#ModalEditor").froalaEditor();
+
+    $container = $("#studioContainer");
+    $container.HelperPlugin({});
+    $container.PNotifyPlugin({});
 
     $("#btnImport").unbind("click").bind("click", function (e) { Import(e); });
     $("#btnPreview").unbind("click").bind("click", function (e) { Preview(e); });
@@ -114,6 +163,7 @@ $(document).ready(function () {
         backdrop: 'static',
         show: false
     });
+
 });
 
 var GL_blogHTMLData = "";
