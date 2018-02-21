@@ -58,14 +58,61 @@
                 <div id="tabdrafts">
                     <div id="gridDraft"></div>
                 </div>
-                <div id="tabeditor">
-                    <form class="form-inline my-2 my-lg-3">
-                        <button class="btn btn-outline-info my-2 my-sm-0 mr-1" id="btnblogSave">
+                <div id="tabeditor">                   
+                    <div id="wysiwygeditor"></div>
+
+					<div id="blogAccordion">
+					<h3>
+                                        <a href="#">Details</a>
+                                    </h3>
+									<div>
+									
+<form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Meta Title</label>
+      <input class="form-control" id="txtMetaTitle" placeholder="Meta Title">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Meta Keywords</label>
+      <input class="form-control" id="txtMetaKeyword" placeholder="Meta Keywords">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Meta Description</label>
+    <input type="text" class="form-control" id="txtMetaDescription" placeholder="Meta Description">
+  </div> 
+   <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Blog Title</label>
+      <input class="form-control" id="txtBlogTitle" placeholder="Blog Title">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Blog Keywords</label>
+      <input class="form-control" id="txtBlogKeyword" placeholder="Blog Keywords">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Blog URL</label>
+      <input class="form-control" id="txtBlogURL" placeholder="Blog URL">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Blog Thumbnail URL</label>
+      <input class="form-control" id="txtBlogThumbURL" placeholder="Blog Thumbnail URL">
+    </div>
+  </div>
+   <div class="form-group">
+    <label for="inputAddress">Blog Description</label>
+    <input type="text" class="form-control" id="txtBlogDescription" placeholder="Blog Description">
+  </div> 
+  <button class="btn btn-outline-info my-2 my-sm-0 mr-1" id="btnblogSave">
                             <i class="fas fa-cloud mr-1"></i>Save</button>
                         <button class="btn btn-outline-danger my-2 my-sm-0 mr-1" id="btnblogDiscard">
                             <i class="fas fa-undo mr-1"></i>Discard</button>
-                    </form>
-                    <div id="wysiwygeditor"></div>
+</form>
+</div>
+</div>
                 </div>
             </div>
         </div>
