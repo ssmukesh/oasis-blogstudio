@@ -120,6 +120,9 @@
         redirect_studio: function (options) {
             window.location = "/studio/editor";
         },
+        redirect_view_studio: function (options) {
+            window.location = "/view-editor";
+        },
         redirect_login: function (options) {
             window.location = "/";
         },

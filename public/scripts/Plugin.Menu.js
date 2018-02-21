@@ -19,74 +19,27 @@
     // minified (especially when both are regularly referenced in your plugin).
 
     var // plugin name
-        pluginName = "UserPlugin",
+        pluginName = "MenuPlugin",
         // key using in $.data()
         dataKey = "plugin_" + pluginName;
+
 
     var Plugin = function (element, options) {
         this.element = element;
 
         this.options = {
-            // default options
-            container: "",
-            homeContainer: ""
+            container: ""
         };
-
-        this.options.homeContainer = $("#homeContainer");
         this.options.container = element;
         this.init(options);
-    };
-
-    function _login(options) {
-
-        var userInfo = { email: $("#inputEmail").val(), password: $("#inputPassword").val() };
-
-        options.container.HelperPlugin().ShowHideEjWaitingPopup(true);
-
-        try {
-
-            var body = {
-                grant_type: 'password',
-                username: userInfo.email,
-                password: userInfo.password
-            };
-
-            $.ajax({
-                type: 'POST',
-                data: body,
-                cache: false,
-                dataType: 'json',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.authorization,
-                complete: function (result) {
-                },
-                success: function (data) {
-                    options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
-                    options.container.HelperPlugin().SetUserProfile(options, data);
-                    options.container.HelperPlugin().redirect_view_studio();
-                },
-                error: function (error) {
-                    options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
-                    options.container.HelperPlugin().showPNotifyAlert(options, {
-                        title: "Having Trouble Signing On?",
-                        text: 'You have entered an incorrect email or Password. Please enter your information again.', type: "error"
-                    });
-                }
-            });
-
-        }
-        catch (error) {
-            options.container.HelperPlugin().redirect_signout();
-        }
-
     };
 
     function _registerEvents(options) {
 
         try {
-            $("#loginForm").submit(function (event) {
+            $("#btnSignOut").unbind("click").bind("click", function (event) {
                 event.preventDefault();
-                _login(options);
+                options.container.HelperPlugin().redirect_signout();
             });
         }
         catch (error) {
@@ -100,8 +53,7 @@
         init: function (options) {
             $.extend(this.options, options);
             _registerEvents(this.options);
-            this.options.container.HelperPlugin().InitEjWaitingPopup(this.options.homeContainer);
-        },
+        }
     };
 
     /*

@@ -13,10 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.get('/', (req, res) => res.render('studio/index-editor'));
+app.get('/', (req, res) => res.render('studio/signin'));
 app.get('/signin', (req, res) => res.render('studio/signin'));
+app.get('/view-editor', (req, res) => res.render('studio/view-editor'));
 app.get('/preview', (req, res) => res.render('studio/preview'));
-app.get('/studio/editor', (req, res) => res.render('studio/index-editor'));
+app.get('/editor', (req, res) => res.render('studio/wysiwyg-editor'));
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 app.use('/api_call', require('./routes/api_call.js'));
 
