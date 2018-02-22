@@ -38,6 +38,9 @@
             wysiwygeditor: "",
             draftBlogEntity: "",
             draftBlogEJModel: [],
+            draftBlogRowItemEJModel: {
+                PkGuid: ""
+            },
             draftBlogMapping: "",
             blogAccordion: ""
         };
@@ -63,6 +66,44 @@
     }
     function _configureWYSIWYGeditor(options) {
         options.wysiwygeditor.froalaEditor();
+    }
+
+    function _API_GetBlogByBlog(options) {
+
+        var user_profile = options.container.HelperPlugin().GetUserProfile();
+        options.container.HelperPlugin().ShowHideEjWaitingPopup(true);
+        var blog = {
+            PkGuid: options.draftBlogRowItemEJModel.PkGuid,
+            FkUserId: options.draftBlogRowItemEJModel.FkUserId
+        };
+
+        $.ajax({
+            url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.GetBlogByBlog,
+            type: 'POST',
+            cache: false,
+            data: blog,
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + user_profile.grant_access_token);
+            },
+            success: function (data) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.draftBlogRowItemEJModel = data;
+                _map_draftBlogEntity_draftBlogView(options);
+                options.editorTab.ejTab({ selectedItemIndex: 1 });
+            },
+            error: function (error) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.container.HelperPlugin().showPNotifyAlert(null, {
+                    title: "Alert",
+                    text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
+                });
+                if (_.isEqual(error.status.toString(), "401")) {
+                    options.container.HelperPlugin().redirect_login();
+                }
+            }
+        });
+
     }
 
     function _API_GetblogDrafts(options, isSoftRefresh) {
@@ -109,6 +150,100 @@
                     title: "Alert",
                     text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
                 });
+                if (_.isEqual(error.status.toString(), "401")) {
+                    options.container.HelperPlugin().redirect_login();
+                }
+            }
+        });
+    }
+
+    function _API_saveDraftBlog(options) {
+
+        var user_profile = options.container.HelperPlugin().GetUserProfile();
+        options.container.HelperPlugin().ShowHideEjWaitingPopup(true);
+        var GL_editorContent = $("#wysiwygeditor").froalaEditor('html.get');
+
+        var blog =
+            {
+                MetaTitle: $("#txtMetaTitle").val(),
+                MetaKeywords: $("#txtMetaKeyword").val(),
+                MetaDescription: $("#txtMetaDescription").val(),
+                BlogContent: GL_editorContent,
+                BlogUrl: $("#txtBlogURL").val(),
+                BlogTitle: $("#txtBlogTitle").val(),
+                BlogKeyword: $("#txtBlogKeyword").val(),
+                BlogThumnailUrl: $("#txtBlogThumbURL").val(),
+                PkGuid: options.draftBlogRowItemEJModel.PkGuid,
+                FkUserId: user_profile.PKGuid
+            };
+
+        $.ajax({
+            url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.UpsertBlog,
+            type: 'POST',
+            cache: false,
+            data: blog,
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + user_profile.grant_access_token);
+            },
+            success: function (data) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.container.HelperPlugin().showPNotifyAlert(null, {
+                    title: "Information",
+                    text: 'Blog contents are published.', type: "info"
+                });
+                _AddMode(options);
+                _API_GetblogDrafts(options, true);
+            },
+            error: function (error) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.container.HelperPlugin().showPNotifyAlert(null, {
+                    title: "Alert",
+                    text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
+                });
+                if (_.isEqual(error.status.toString(), "401")) {
+                    options.container.HelperPlugin().redirect_login();
+                }
+            }
+        });
+    }
+
+    function _API_DeleteBlog(options) {
+        var user_profile = options.container.HelperPlugin().GetUserProfile();
+        options.container.HelperPlugin().ShowHideEjWaitingPopup(true);
+
+        var blog =
+            {
+                PkGuid: options.draftBlogRowItemEJModel.PkGuid
+            };
+
+        $.ajax({
+            url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.DeleteBlogById,
+            type: 'POST',
+            cache: false,
+            data: blog,
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + user_profile.grant_access_token);
+            },
+            success: function (data) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.container.HelperPlugin().showPNotifyAlert(null, {
+                    title: "Information",
+                    text: 'Blog contents are deleted.', type: "info"
+                });
+                options.draftBlogRowItemEJModel.PkGuid = "";
+                _API_GetblogDrafts(options, true);
+            },
+            error: function (error) {
+                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
+                options.container.HelperPlugin().showPNotifyAlert(null, {
+                    title: "Alert",
+                    text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
+                });
+                if (_.isEqual(error.status.toString(), "401")) {
+                    options.container.HelperPlugin().redirect_login();
+                }
             }
         });
     }
@@ -154,6 +289,17 @@
         });
     }
 
+    function _map_draftBlogEntity_draftBlogView(options) {
+        $("#txtMetaTitle").val(options.draftBlogRowItemEJModel.MetaTitle);
+        $("#txtMetaKeyword").val(options.draftBlogRowItemEJModel.MetaKeywords);
+        $("#txtMetaDescription").val(options.draftBlogRowItemEJModel.MetaDescription);
+        $("#txtBlogURL").val(options.draftBlogRowItemEJModel.BlogUrl);
+        $("#txtBlogTitle").val(options.draftBlogRowItemEJModel.BlogTitle);
+        $("#txtBlogKeyword").val(options.draftBlogRowItemEJModel.BlogKeyword);
+        $("#txtBlogThumbURL").val(options.draftBlogRowItemEJModel.BlogThumnailUrl);
+        $("#wysiwygeditor").froalaEditor('html.set', options.draftBlogRowItemEJModel.BlogContent);
+    }
+
     function _loadDraftBlogGrid(options) {
         options.gridDraft.ejGrid({
             dataSource: options.draftBlogEJModel,
@@ -172,6 +318,14 @@
             enableHeaderHover: true,
             filterSettings: { filterType: "menu" },
             allowTextWrap: true,
+            contextMenuSettings: {
+                enableContextMenu: true, contextMenuItems: [],
+                customContextMenuItems: [
+                    { id: 'blog_Edit', text: "Edit" },
+                    { id: 'blog_Delete', text: "Delete" },
+                    { id: 'blog_Preview', text: "Preview" }
+                ]
+            },
             columns: [
                 { field: "PkId", headerText: "PkId", isPrimaryKey: true, textAlign: ej.TextAlign.Right, width: 10, visible: false },
                 { field: "MetaTitle", headerText: "Meta Title", textAlign: ej.TextAlign.Right },
@@ -209,54 +363,44 @@
             dataBound: function (args) {
                 //Render tooltip in dataBound event.
                 $("[data-toggle=tooltip]").tooltip();
+            },
+            contextClick: function (args) {
+                try {
+
+                    options.draftBlogRowItemEJModel = args.model.currentViewData[args.model.selectedRowIndex];
+
+                    if (!ej.isNullOrUndefined(args.ID) && (_.isEqual(args.ID, 'blog_Edit'))) {
+                        _API_GetBlogByBlog(options);
+                    }
+                    else if (!ej.isNullOrUndefined(args.ID) && (_.isEqual(args.ID, 'blog_Delete'))) {
+                        _API_DeleteBlog(options);
+                    }
+                    else if (!ej.isNullOrUndefined(args.ID) && (_.isEqual(args.ID, 'blog_Preview'))) {
+                        localStorage.setItem('GLeditorContent', options.draftBlogRowItemEJModel.BlogContent);
+                        options.draftBlogRowItemEJModel.PkGuid = "";
+                        options.container.HelperPlugin().redirect_preview();
+                    }
+
+                } catch (e) {
+                    options.container.HelperPlugin().showPNotifyAlert(null, {
+                        title: "Alert",
+                        text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
+                    });
+                }
             }
         });
     }
 
-    function _saveDraftBlog(options) {
-
-        var user_profile = options.container.HelperPlugin().GetUserProfile();
-        options.container.HelperPlugin().ShowHideEjWaitingPopup(true);
-        var GL_editorContent = $("#wysiwygeditor").froalaEditor('html.get');
-
-        var blog =
-            {
-                MetaTitle: $("#txtMetaTitle").val(),
-                MetaKeywords: $("#txtMetaKeyword").val(),
-                MetaDescription: $("#txtMetaDescription").val(),
-                BlogContent: GL_editorContent,
-                BlogUrl: $("#txtBlogURL").val(),
-                BlogTitle: $("#txtBlogTitle").val(),
-                BlogKeyword: $("#txtBlogKeyword").val(),
-                BlogThumnailUrl: $("#txtBlogThumbURL").val(),
-                FkUserId: user_profile.PKGuid
-            };
-
-        $.ajax({
-            url: JSON_APP_CONFIG.issuer + JSON_APP_CONFIG.endpoint.UpsertBlog,
-            type: 'POST',
-            cache: false,
-            data: blog,
-            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + user_profile.grant_access_token);
-            },
-            success: function (data) {
-                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
-                options.container.HelperPlugin().showPNotifyAlert(null, {
-                    title: "Information",
-                    text: 'Blog contents are published.', type: "info"
-                });
-                _API_GetblogDrafts(options, true);
-            },
-            error: function (error) {
-                options.container.HelperPlugin().ShowHideEjWaitingPopup(false);
-                options.container.HelperPlugin().showPNotifyAlert(null, {
-                    title: "Alert",
-                    text: 'Please contact the server administrator, you@example.com and inform them of the time the error occurred, and anything you might have done that may have caused the error.', type: "error"
-                });
-            }
-        });
+    function _AddMode(options) {
+        options.draftBlogRowItemEJModel.PkGuid = "";
+        $("#txtMetaTitle").val("");
+        $("#txtMetaKeyword").val("");
+        $("#txtMetaDescription").val("");
+        $("#txtBlogURL").val("");
+        $("#txtBlogTitle").val("");
+        $("#txtBlogKeyword").val("");
+        $("#txtBlogThumbURL").val("");
+        $("#wysiwygeditor").froalaEditor('html.set', "");
     }
 
     function _registerEvents(options) {
@@ -264,11 +408,20 @@
         try {
             $("#btnblogSave").unbind("click").bind("click", function (event) {
                 event.preventDefault();
-                _saveDraftBlog(options);
+                _API_saveDraftBlog(options);
             });
             $("#btnblogDiscard").unbind("click").bind("click", function (event) {
                 event.preventDefault();
                 options.container.HelperPlugin().showPNotifyAlert(options, { title: "Coming soon...", text: "An awesome discard option is coming very soon.", type: "info" });
+            });
+            $("#btnblogAdd").unbind("click").bind("click", function (event) {
+                event.preventDefault();
+                _AddMode(options);
+            });
+            $("#btnblogDelete").unbind("click").bind("click", function (event) {
+                event.preventDefault();
+                if (_.isEmpty(options.draftBlogRowItemEJModel.PkGuid)) return;
+                _API_DeleteBlog(options);
             });
         }
         catch (error) {
@@ -284,6 +437,9 @@
         // initialize options
         init: function (options) {
             $.extend(this.options, options);
+            if (!this.options.container.HelperPlugin().CheckUserAuthorized()) {
+                this.options.container.HelperPlugin().redirect_login(this.options);
+            }
             this.options.container.HelperPlugin().InitEjWaitingPopup(this.options.homeContainer);
             _configureMasterTab(this.options);
             _ejAccordion(this.options);

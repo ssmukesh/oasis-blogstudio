@@ -100,8 +100,6 @@
         return options.userProfile;
     }
 
-
-
     Plugin.prototype = {
         // initialize options
         init: function (options) {
@@ -123,7 +121,12 @@
         redirect_view_studio: function (options) {
             window.location = "/view-editor";
         },
+        redirect_preview: function (options) {
+            window.open("/preview", '_blank')
+        },
         redirect_login: function (options) {
+            localStorage.removeItem('user_grant');
+            localStorage.removeItem('user_PKID');
             window.location = "/";
         },
         showPNotifyAlert: function (options, notifySettings) {
@@ -145,6 +148,14 @@
         },
         GetUserProfile: function (options) {
             return _getUserProfile(this.options);
+        },
+        CheckUserAuthorized: function (options) {
+            _getUserProfile(this.options);
+
+            if (_.isEmpty(this.options.userProfile.PKGuid) || _.isEmpty(this.options.userProfile.grant_access_token)) {
+                return false;
+            }
+            return true;
         }
     };
 

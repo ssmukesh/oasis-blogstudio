@@ -4,6 +4,8 @@ JSON_APP_CONFIG={
     "authorization": "oauth2/v1/Tokens/bearer",
     "UpsertBlog": "YELLOWPAGES/API/V1.0/BLOG/UpsertBlog",
     "GetAllDraftBlog": "YELLOWPAGES/API/V1.0/BLOG/GetAllDraftBlog",
+    "GetBlogByBlog": "YELLOWPAGES/API/V1.0/BLOG/GetBlogByBlog",
+    "DeleteBlogById": "YELLOWPAGES/API/V1.0/BLOG/DeleteBlogById",
     "refreshtoken": ""
   }
 }

@@ -39,7 +39,7 @@
         try {
             $("#btnSignOut").unbind("click").bind("click", function (event) {
                 event.preventDefault();
-                options.container.HelperPlugin().redirect_signout();
+                options.container.HelperPlugin().redirect_login();
             });
         }
         catch (error) {

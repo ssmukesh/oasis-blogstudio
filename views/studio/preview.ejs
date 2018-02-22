@@ -33,10 +33,10 @@
     <div id="previewCotainer"></div>
 
     <script>
-        $(document).ready(function () {
-            debugger;
-            if (window.opener.GL_editorContent) {
-                $("#previewCotainer").html(window.opener.GL_editorContent);
+        $(document).ready(function () {     
+		var GLeditorContent = localStorage.getItem('GLeditorContent');
+            if (GLeditorContent) {
+                $("#previewCotainer").html(GLeditorContent);
             }
         });
     </script>
